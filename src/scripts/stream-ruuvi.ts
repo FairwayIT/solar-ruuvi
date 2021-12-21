@@ -1,6 +1,6 @@
 import mqtt from 'async-mqtt';
 import ruuvi from 'node-ruuvitag';
-import { Observable } from 'rxjs';
+import { firstValueFrom, from, Observable } from 'rxjs';
 import { EventEmitter } from 'stream';
 
 const client = mqtt.connect('mqtt://localhost');
@@ -23,8 +23,11 @@ client.on('connect', async function () {
   // });
 });
 
-const tags = await ruuvi.findTags();
-console.log('found tags', tags);
+let tags: EventEmitter[] = [];
+ruuvi.findTags().then((foundTags: EventEmitter[]) => {
+  tags = foundTags;
+  console.log('found tags', tags);
+});
 
 if (tags && tags.length > 0) {
   // create observable for the tag updated event emitter

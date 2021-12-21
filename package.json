@@ -2,13 +2,17 @@
   "name": "solar-ruuvi",
   "version": "1.0.5",
   "description": "scripts for ruuvi sensors",
-  "main": "solar-ruuvi.js",
-  "type": "module",
+  "main": "lib/stream-ruuvi.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "mrobst",
   "license": "ISC",
+  "directories": {
+    "lib": "src",
+    "test": "test/",
+    "config": "config/"
+  },
   "dependencies": {
     "async-mqtt": "^2.6.1",
     "node-ruuvitag": "^4.6.1",

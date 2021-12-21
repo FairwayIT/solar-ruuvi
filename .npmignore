@@ -1,0 +1,12 @@
+src/
+data/
+config/
+Dockerfile
+.vscode/
+.github/
+.dockerignore
+.nycrc
+.editorconfig
+.eslintrc.json
+test/
+tsconfig.json

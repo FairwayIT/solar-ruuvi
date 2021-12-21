@@ -1,6 +1,6 @@
 {
   "name": "solar-ruuvi",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "scripts for ruuvi sensors",
   "main": "solar-ruuvi.js",
   "scripts": {

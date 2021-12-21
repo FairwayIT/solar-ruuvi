@@ -7,12 +7,12 @@ const client = mqtt.connect('mqtt://localhost');
 //console.log('client is', client);
 
 // let tag: EventEmitter;
-let tag$: Observable<any>;
+let tag$: Observable<any> | undefined;
 
 // connect to mqtt broker and publish a message
 client.on('connect', async function () {
   console.log('connected');
-  await client.subscribe('solar/edge002');
+  await client.subscribe('solar/edge001');
   // , function (err: any) {
   // if (!err) {
   //   // console.log("publishing");
@@ -27,31 +27,33 @@ let tags: EventEmitter[] = [];
 ruuvi.findTags().then((foundTags: EventEmitter[]) => {
   tags = foundTags;
   console.log('found tags', tags);
-});
-
-if (tags && tags.length > 0) {
-  // create observable for the tag updated event emitter
-  tag$ = new Observable((observer: any) => {
-    tags[0].on('updated', (val: any) => observer.next(val));
-    tags[0].on('error', (err: any) => observer.error(err));
-  });
-
-  // make observables from the event emitters
-  // const ruuvi$ = Observable.create((observer: any) => {
-  //   ruuvi.on('found', (val: any) => observer.next(val));
-  //   ruuvi.on('error', (err: any) => observer.error(err));
   // });
 
-  // ruuvi$.subscribe({
-  //   next: (tag: EventEmitter) => {
-  //     console.log('ruuvi observable subscription val is ', tag);
-  //     // create observable for the tag updated event emitter
-  //     tag$ = new Observable((observer: any) => {
-  //       tag.on('updated', (val: any) => observer.next(val));
-  //       tag.on('error', (err: any) => observer.error(err));
-  //     });
+  if (tags.length > 0) {
+    // create observable for the tag updated event emitter
+    tag$ = new Observable((observer: any) => {
+      tags[0].on('updated', (val: any) => observer.next(val));
+      tags[0].on('error', (err: any) => observer.error(err));
+    });
+  }
+});
+// make observables from the event emitters
+// const ruuvi$ = Observable.create((observer: any) => {
+//   ruuvi.on('found', (val: any) => observer.next(val));
+//   ruuvi.on('error', (err: any) => observer.error(err));
+// });
 
-  // subscribe to the observable
+// ruuvi$.subscribe({
+//   next: (tag: EventEmitter) => {
+//     console.log('ruuvi observable subscription val is ', tag);
+//     // create observable for the tag updated event emitter
+//     tag$ = new Observable((observer: any) => {
+//       tag.on('updated', (val: any) => observer.next(val));
+//       tag.on('error', (err: any) => observer.error(err));
+//     });
+
+// subscribe to the observable
+if (tag$) {
   tag$.subscribe({
     next: (val) => {
       console.log('tag observable subscription val is ', val);
@@ -60,12 +62,13 @@ if (tags && tags.length > 0) {
       console.error('tag observable error is ', err);
     },
   });
-  //   },
-  //   error: (err: any) => {
-  //     console.error('ruuvi observable error is ', err);
-  //   },
-  // });
 }
+//   },
+//   error: (err: any) => {
+//     console.error('ruuvi observable error is ', err);
+//   },
+// });
+// }
 
 // // event callback based logic
 // // read the tag and publish to mqtt channel each reading

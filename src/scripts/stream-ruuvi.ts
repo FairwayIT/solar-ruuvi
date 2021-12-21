@@ -67,17 +67,17 @@ if (tags && tags.length > 0) {
   // });
 }
 
-// event callback based logic
-// read the tag and publish to mqtt channel each reading
-ruuvi.on('found', (tag: any) => {
-  console.log('Found RuuviTag, id: ' + tag.id);
-  tag.on('updated', (data: any) => {
-    const reading = JSON.stringify(data, null, '\t');
-    console.log('Got data from RuuviTag ' + tag.id + ':\n' + reading);
-    client.publish('solar/edge002', reading);
-  });
-});
+// // event callback based logic
+// // read the tag and publish to mqtt channel each reading
+// ruuvi.on('found', (tag: any) => {
+//   console.log('Found RuuviTag, id: ' + tag.id);
+//   tag.on('updated', (data: any) => {
+//     const reading = JSON.stringify(data, null, '\t');
+//     console.log('Got data from RuuviTag ' + tag.id + ':\n' + reading);
+//     client.publish('solar/edge002', reading);
+//   });
+// });
 
-ruuvi.on('warning', (message: any) => {
-  console.error(new Error(message));
-});
+// ruuvi.on('warning', (message: any) => {
+//   console.error(new Error(message));
+// });

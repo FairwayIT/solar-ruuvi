@@ -1,13 +1,13 @@
 import mqtt from 'async-mqtt';
 import ruuvi from 'node-ruuvitag';
-import { firstValueFrom, from, Observable } from 'rxjs';
+import { fromEvent, from, Observable, merge } from 'rxjs';
 import { EventEmitter } from 'stream';
 
 const client = mqtt.connect('mqtt://localhost');
 //console.log('client is', client);
 
 // let tag: EventEmitter;
-let tag$: Observable<any> | undefined;
+let tag$: Observable<any>;
 
 // connect to mqtt broker and publish a message
 client.on('connect', async function () {
@@ -24,6 +24,8 @@ client.on('connect', async function () {
 });
 
 let tags: EventEmitter[] = [];
+let message$: Observable<any>;
+
 ruuvi.findTags().then((foundTags: EventEmitter[]) => {
   tags = foundTags;
   console.log('found tags', tags);
@@ -31,12 +33,28 @@ ruuvi.findTags().then((foundTags: EventEmitter[]) => {
 
   if (tags.length > 0) {
     // create observable for the tag updated event emitter
+    message$ = fromEvent(tags[0], 'message');
     tag$ = new Observable((observer: any) => {
       tags[0].on('updated', (val: any) => observer.next(val));
       tags[0].on('error', (err: any) => observer.error(err));
     });
   }
+  // });
+
+  const message2$ = fromEvent(tags[0], 'message');
+  const error$ = fromEvent(tags[0], 'error');
+
+  message$.subscribe({
+    next: (val) => console.log('val from message is ', val),
+  });
+  message2$.subscribe({
+    next: (val) => console.log('val from message2 is ', val),
+  });
 });
+// const obs$ = merge(
+//   message$.catch((err) => of(err)),
+//   error$.mergeMap((val) => throw(val))
+// );
 // make observables from the event emitters
 // const ruuvi$ = Observable.create((observer: any) => {
 //   ruuvi.on('found', (val: any) => observer.next(val));
@@ -53,16 +71,16 @@ ruuvi.findTags().then((foundTags: EventEmitter[]) => {
 //     });
 
 // subscribe to the observable
-if (tag$) {
-  tag$.subscribe({
-    next: (val) => {
-      console.log('tag observable subscription val is ', val);
-    },
-    error: (err) => {
-      console.error('tag observable error is ', err);
-    },
-  });
-}
+// if (tag$) {
+// tag$.subscribe({
+//   next: (val) => {
+//     console.log('tag observable subscription val is ', val);
+//   },
+//   error: (err) => {
+//     console.error('tag observable error is ', err);
+//   },
+// });
+// }
 //   },
 //   error: (err: any) => {
 //     console.error('ruuvi observable error is ', err);

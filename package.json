@@ -3,6 +3,7 @@
   "version": "1.0.4",
   "description": "scripts for ruuvi sensors",
   "main": "solar-ruuvi.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

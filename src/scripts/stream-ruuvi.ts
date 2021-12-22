@@ -33,7 +33,7 @@ ruuvi.findTags().then((foundTags: EventEmitter[]) => {
 
   if (tags.length > 0) {
     // create observable for the tag updated event emitter
-    // message$ = fromEvent(tags[0], 'updated');
+    message$ = fromEvent(tags[0], 'updated');
     tag$ = new Observable((observer: any) => {
       tags[0].on('updated', (val: any) => observer.next(val));
       tags[0].on('error', (err: any) => observer.error(err));
@@ -47,7 +47,7 @@ ruuvi.findTags().then((foundTags: EventEmitter[]) => {
   // message$.subscribe({
   //   next: (val) => console.log('val from message is ', val),
   // });
-  message2$.pipe(debounceTime(60000)).subscribe({
+  message$.pipe(debounceTime(60000)).subscribe({
     next: (val) => {
       console.log('val from message2 with delay is ', val);
       // publish the reading as JSON to MQTT

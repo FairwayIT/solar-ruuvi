@@ -53,59 +53,59 @@ ruuvi.findTags().then((foundTags: EventEmitter[]) => {
   error$.subscribe({
     next: (val) => console.log('val from error is ', val),
   });
+
+  // const obs$ = merge(
+  //   message$.catch((err) => of(err)),
+  //   error$.mergeMap((val) => throw(val))
+  // );
+  // make observables from the event emitters
+  // const ruuvi$ = Observable.create((observer: any) => {
+  //   ruuvi.on('found', (val: any) => observer.next(val));
+  //   ruuvi.on('error', (err: any) => observer.error(err));
+  // });
+
+  // ruuvi$.subscribe({
+  //   next: (tag: EventEmitter) => {
+  //     console.log('ruuvi observable subscription val is ', tag);
+  //     // create observable for the tag updated event emitter
+  //     tag$ = new Observable((observer: any) => {
+  //       tag.on('updated', (val: any) => observer.next(val));
+  //       tag.on('error', (err: any) => observer.error(err));
+  //     });
+
+  // subscribe to the observable
+  // if (tag$) {
+  // tag$.subscribe({
+  //   next: (val) => {
+  //     console.log('tag observable subscription val is ', val);
+  //   },
+  //   error: (err) => {
+  //     console.error('tag observable error is ', err);
+  //   },
+  // });
+  // }
+  //   },
+  //   error: (err: any) => {
+  //     console.error('ruuvi observable error is ', err);
+  //   },
+  // });
+  // }
+
+  tags[0].on('updated', (data: any) => {
+    console.log('data from updated event is ', data);
+  });
+
+  // // event callback based logic
+  // // read the tag and publish to mqtt channel each reading
+  // ruuvi.on('found', (tag: any) => {
+  //   console.log('Found RuuviTag, id: ' + tag.id);
+  //   tag.on('updated', (data: any) => {
+  //     const reading = JSON.stringify(data, null, '\t');
+  //     console.log('Got data from RuuviTag ' + tag.id + ':\n' + reading);
+  //     client.publish('solar/edge002', reading);
+  //   });
+  // });
+
+  // ruuvi.on('warning', (message: any) => {
+  //   console.error(new Error(message));
 });
-// const obs$ = merge(
-//   message$.catch((err) => of(err)),
-//   error$.mergeMap((val) => throw(val))
-// );
-// make observables from the event emitters
-// const ruuvi$ = Observable.create((observer: any) => {
-//   ruuvi.on('found', (val: any) => observer.next(val));
-//   ruuvi.on('error', (err: any) => observer.error(err));
-// });
-
-// ruuvi$.subscribe({
-//   next: (tag: EventEmitter) => {
-//     console.log('ruuvi observable subscription val is ', tag);
-//     // create observable for the tag updated event emitter
-//     tag$ = new Observable((observer: any) => {
-//       tag.on('updated', (val: any) => observer.next(val));
-//       tag.on('error', (err: any) => observer.error(err));
-//     });
-
-// subscribe to the observable
-// if (tag$) {
-// tag$.subscribe({
-//   next: (val) => {
-//     console.log('tag observable subscription val is ', val);
-//   },
-//   error: (err) => {
-//     console.error('tag observable error is ', err);
-//   },
-// });
-// }
-//   },
-//   error: (err: any) => {
-//     console.error('ruuvi observable error is ', err);
-//   },
-// });
-// }
-
-tags[0].on('updated', (data: any) => {
-  console.log('data from updated event is ', data);
-});
-
-// // event callback based logic
-// // read the tag and publish to mqtt channel each reading
-// ruuvi.on('found', (tag: any) => {
-//   console.log('Found RuuviTag, id: ' + tag.id);
-//   tag.on('updated', (data: any) => {
-//     const reading = JSON.stringify(data, null, '\t');
-//     console.log('Got data from RuuviTag ' + tag.id + ':\n' + reading);
-//     client.publish('solar/edge002', reading);
-//   });
-// });
-
-// ruuvi.on('warning', (message: any) => {
-//   console.error(new Error(message));
-// });

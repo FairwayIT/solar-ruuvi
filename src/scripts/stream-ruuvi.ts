@@ -1,7 +1,7 @@
 import mqtt from 'async-mqtt';
 import EventEmitter from 'events';
 import ruuvi from 'node-ruuvitag';
-import { fromEvent, from, Observable, merge } from 'rxjs';
+import { fromEvent, from, Observable, merge, debounceTime } from 'rxjs';
 
 const client = mqtt.connect('mqtt://localhost');
 //console.log('client is', client);
@@ -33,7 +33,7 @@ ruuvi.findTags().then((foundTags: EventEmitter[]) => {
 
   if (tags.length > 0) {
     // create observable for the tag updated event emitter
-    message$ = fromEvent(tags[0], 'updated');
+    // message$ = fromEvent(tags[0], 'updated');
     tag$ = new Observable((observer: any) => {
       tags[0].on('updated', (val: any) => observer.next(val));
       tags[0].on('error', (err: any) => observer.error(err));
@@ -44,11 +44,17 @@ ruuvi.findTags().then((foundTags: EventEmitter[]) => {
   const message2$ = fromEvent(tags[0], 'updated');
   const error$ = fromEvent(tags[0], 'error');
 
-  message$.subscribe({
-    next: (val) => console.log('val from message is ', val),
-  });
-  message2$.subscribe({
-    next: (val) => console.log('val from message2 is ', val),
+  // message$.subscribe({
+  //   next: (val) => console.log('val from message is ', val),
+  // });
+  message2$.pipe(debounceTime(60000)).subscribe({
+    next: (val) => {
+      console.log('val from message2 with delay is ', val);
+      // publish the reading as JSON to MQTT
+      const reading = JSON.stringify(val, null, '\t');
+      // console.log('Got data from RuuviTag ' + tags[0].id + ':\n' + reading);
+      client.publish('solar/edge001', reading);
+    },
   });
   error$.subscribe({
     next: (val) => console.log('val from error is ', val),

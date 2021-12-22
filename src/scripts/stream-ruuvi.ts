@@ -33,7 +33,7 @@ ruuvi.findTags().then((foundTags: EventEmitter[]) => {
 
   if (tags.length > 0) {
     // create observable for the tag updated event emitter
-    message$ = fromEvent(tags[0], 'message');
+    message$ = fromEvent(tags[0], 'updated');
     tag$ = new Observable((observer: any) => {
       tags[0].on('updated', (val: any) => observer.next(val));
       tags[0].on('error', (err: any) => observer.error(err));
@@ -41,7 +41,7 @@ ruuvi.findTags().then((foundTags: EventEmitter[]) => {
   }
   // });
 
-  const message2$ = fromEvent(tags[0], 'message');
+  const message2$ = fromEvent(tags[0], 'updated');
   const error$ = fromEvent(tags[0], 'error');
 
   message$.subscribe({

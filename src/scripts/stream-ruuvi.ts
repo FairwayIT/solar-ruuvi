@@ -91,9 +91,9 @@ ruuvi.findTags().then((foundTags: EventEmitter[]) => {
   // });
   // }
 
-  tags[0].on('updated', (data: any) => {
-    console.log('data from updated event is ', data);
-  });
+  // tags[0].on('updated', (data: any) => {
+  //   console.log('received data from updated event is ', data);
+  // });
 
   // // event callback based logic
   // // read the tag and publish to mqtt channel each reading

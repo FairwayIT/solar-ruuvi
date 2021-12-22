@@ -50,6 +50,9 @@ ruuvi.findTags().then((foundTags: EventEmitter[]) => {
   message2$.subscribe({
     next: (val) => console.log('val from message2 is ', val),
   });
+  error$.subscribe({
+    next: (val) => console.log('val from error is ', val),
+  });
 });
 // const obs$ = merge(
 //   message$.catch((err) => of(err)),
@@ -87,6 +90,10 @@ ruuvi.findTags().then((foundTags: EventEmitter[]) => {
 //   },
 // });
 // }
+
+tags[0].on('updated', (data: any) => {
+  console.log('data from updated event is ', data);
+});
 
 // // event callback based logic
 // // read the tag and publish to mqtt channel each reading

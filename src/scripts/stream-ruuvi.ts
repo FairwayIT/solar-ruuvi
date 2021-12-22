@@ -1,7 +1,7 @@
 import mqtt from 'async-mqtt';
+import EventEmitter from 'events';
 import ruuvi from 'node-ruuvitag';
 import { fromEvent, from, Observable, merge } from 'rxjs';
-import { EventEmitter } from 'stream';
 
 const client = mqtt.connect('mqtt://localhost');
 //console.log('client is', client);

@@ -38,7 +38,7 @@ void (async function () {
       // publish the reading as JSON to MQTT
       const JSONreading = JSON.stringify(reading, null, '\t');
       console.log(
-        'Got data with delay from RuuviTag ' + t[0].id + ':\n' + reading
+        'Got data with delay from RuuviTag ' + t[0].id + ':\n' + JSONreading
       );
       // push the reading into mqtt
       const published = await client.publish('solar/edge001', JSONreading);

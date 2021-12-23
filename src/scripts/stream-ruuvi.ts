@@ -3,25 +3,22 @@ import EventEmitter from 'events';
 import ruuvi from 'node-ruuvitag';
 import { fromEvent, Observable, auditTime } from 'rxjs';
 
-const client = mqtt.connect('mqtt://localhost');
-//console.log('client is', client);
-
-// connect to mqtt broker and publish a message
-client.on('connect', async function () {
-  console.log('connected');
-  await client.subscribe('solar/edge001');
-  // , function (err: any) {
-  // if (!err) {
-  //   // console.log("publishing");
-  //   // client.publish("solar/edge002", JSON.stringify(stdout));
-  // } else {
-  //   console.log('subscribe error ', err);
-  // }
-  // });
-});
-
 // IIFE to use await but not at top level
 void (async function () {
+  // connect to mqtt broker
+  const client = mqtt.connect('mqtt://localhost');
+  console.log('client is', client);
+
+  // subscribe to a channel (for on/off later?)
+  client.on('connect', async function () {
+    console.log('connected');
+    await client.subscribe('solar/edge001').catch((err) => {
+      console.error('subscribe error ', err);
+    });
+  });
+
+  // find any local ruuvi tags (assume 1 for now) - later we can setup
+  // observables for an array and use forkJoin to emit more than one tag
   const t = await ruuvi.findTags();
   console.log('tags in IIFE are ', t);
 
@@ -38,7 +35,8 @@ void (async function () {
       // publish the reading as JSON to MQTT
       const JSONreading = JSON.stringify(reading, null, '\t');
       console.log(
-        'Got data with delay from RuuviTag ' + t[0].id + ':\n' + JSONreading
+        'Got data with delay from RuuviTag ' + t[0].id + ':\n',
+        JSONreading
       );
       // push the reading into mqtt
       const published = await client.publish('solar/edge001', JSONreading);

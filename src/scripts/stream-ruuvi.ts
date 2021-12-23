@@ -30,7 +30,7 @@ void (async function () {
   const timedReadings$ = readings$.pipe(auditTime(60000));
 
   timedReadings$.subscribe({
-    next: async (reading) => {
+    next: async (reading: any) => {
       // console.log('Reading from ruuvi tag with delay is ', reading);
       // publish the reading as JSON to MQTT
       const JSONreading = JSON.stringify(reading, null, '\t');
@@ -42,17 +42,17 @@ void (async function () {
       const published = await client.publish('solar/edge001', JSONreading);
       console.log('published response ', published);
     },
-    error: (err) => {
+    error: (err: any) => {
       console.error('issue with getting readings ', err);
     },
   });
 
   // capture any warnings from the tag (or errors from the warnings!)
   warnings$.subscribe({
-    next: (warning) => {
+    next: (warning: any) => {
       console.error(new Error(warning));
     },
-    error: (err) => {
+    error: (err: any) => {
       console.error(new Error(err));
     },
   });

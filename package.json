@@ -5,8 +5,8 @@
   "main": "lib/scripts/stream-ruuvi.js",
   "scripts": {
     "dev": "NODE_ENV=development ts-node-dev --files --no-notify src/",
-    "prepublish": "tsc",
-    "build": "tsc",
+    "prepublishOnly": "npm run compile",
+    "build": "npm run compile",
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "shx rm -rf lib/ && tsc"
   },

@@ -1,6 +1,6 @@
 {
   "name": "solar-ruuvi",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Script to read ruuvi sensors and periodically emit data to local mqtt broker",
   "main": "lib/scripts/stream-ruuvi.js",
   "scripts": {

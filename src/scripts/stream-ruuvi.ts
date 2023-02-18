@@ -19,8 +19,15 @@ void (async function () {
 
   // find any local ruuvi tags (assume 1 for now) - later we can setup
   // observables for an array and use forkJoin to emit more than one tag
-  const t = await ruuvi.findTags();
-  console.log('tags in IIFE are ', t);
+  // Feb 2023 - keep looking for tags every 2 minutes until we find some
+  let t: any = null;
+  while (t == null) {
+    t = await ruuvi.findTags().catch((e: any) => {
+      console.error('error finding tags ', e);
+      return null;
+    });
+    console.log('tags in IIFE are ', t);
+  }
 
   // setup observables from first found tag updated event
   const readings$: Observable<any> = fromEvent(t[0], 'updated');
